@@ -2,11 +2,46 @@ body {
   display: grid;
   grid-template-rows: 0.25fr 1fr;
   width: 100dvw;
+  height: 90dvh;
   justify-items: center;
+  align-items: center;
+  font-family: "carbona-variable", sans-serif;
+  font-variation-settings: "MONO" 30, "slnt" 0, "wght" 400;
+  background-color: #ffe4e6;
+}
+
+.header {
+  font-size: 4rem;
 }
 
 .board {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
+  gap: 0;
+  justify-items: center;
+  align-items: center;
+  font-size: 5rem;
+}
+
+.board > div {
+  width: 5rem;
+  height: 5rem;
+  text-align: center;
+  padding: 1rem;
+  margin: 0;
+}
+
+.square2,
+.square8 {
+  border-inline: 0.5rem solid;
+}
+
+.square4,
+.square6 {
+  border-block: 0.5rem solid;
+}
+
+.square5 {
+  border: 0.5rem solid;
 }
