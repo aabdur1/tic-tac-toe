@@ -1,8 +1,11 @@
 const squares = document.querySelectorAll(".board>div");
+const resetBtn = document.querySelector(".reset");
 
 squares.forEach(function (square) {
   square.addEventListener("click", move);
 });
+
+resetBtn.addEventListener("click", clearBoard);
 
 class Player {
   constructor(symbol) {
@@ -35,11 +38,24 @@ function move() {
 
 function checkForWinner(player) {
   if (
-    boardObject["row1Col1"].value === boardObject["row1Col2"].value &&
-    boardObject["row1Col1"].value === boardObject["row1Col3"].value
+    boardObject["row1Col1"] === boardObject["row1Col2"] &&
+    boardObject["row1Col1"] === boardObject["row1Col3"]
   ) {
     console.log(`${player.symbol} is the winner`);
+    resetBoardObject();
   }
+}
+
+function resetBoardObject() {
+  for (let key in boardObject) {
+    boardObject[key] = "";
+  }
+}
+
+function clearBoard() {
+  squares.forEach(function (square) {
+    square.textContent = "";
+  });
 }
 
 const board = [
