@@ -1,3 +1,13 @@
+const squares = document.querySelectorAll(".board>div");
+
+squares.forEach(function (square) {
+  square.addEventListener("click", move);
+});
+
+function move() {
+  console.log(this.textContent);
+}
+
 const board = [
   ["", "", ""],
   ["", "", ""],
@@ -9,5 +19,3 @@ for (let i = 0; i < 3; i++) {
     board[i][j] = "X";
   }
 }
-
-console.log(board);
