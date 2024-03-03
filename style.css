@@ -6,8 +6,8 @@ body {
   justify-items: center;
   align-items: center;
   font-family: "carbona-variable", sans-serif;
-  font-variation-settings: "MONO" 30, "slnt" 0, "wght" 400;
-  background-color: #ffe4e6;
+  font-variation-settings: "MONO" 30, "slnt" 0, "wght" 600;
+  background-color: #fecdd3;
 }
 
 .header {
@@ -31,6 +31,9 @@ body {
   padding: 1rem;
   margin: 0;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 
 .row1Col2,

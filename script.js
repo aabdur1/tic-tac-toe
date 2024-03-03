@@ -12,10 +12,13 @@ class Player {
 }
 
 const player1 = new Player("X");
+const player2 = new Player("O");
 
 function move() {
-  this.textContent = "X";
-  boardObject[this.classList.value] = player1.symbol;
+  let player;
+  player1.isTurn ? (player = player1) : (player = player2);
+  this.textContent = player.symbol;
+  boardObject[this.classList.value] = player.symbol;
   console.log(boardObject);
 }
 
