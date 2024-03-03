@@ -30,18 +30,19 @@ body {
   text-align: center;
   padding: 1rem;
   margin: 0;
+  cursor: pointer;
 }
 
-.square2,
-.square8 {
+.row1Col2,
+.row3Col2 {
   border-inline: 0.5rem solid;
 }
 
-.square4,
-.square6 {
+.row2Col1,
+.row2Col3 {
   border-block: 0.5rem solid;
 }
 
-.square5 {
+.row2Col2 {
   border: 0.5rem solid;
 }
