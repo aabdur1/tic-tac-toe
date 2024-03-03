@@ -16,10 +16,30 @@ const player2 = new Player("O");
 
 function move() {
   let player;
-  player1.isTurn ? (player = player1) : (player = player2);
-  this.textContent = player.symbol;
+  let opponent;
+  if (player1.isTurn) {
+    player = player1;
+    opponent = player2;
+  } else {
+    player = player2;
+    opponent = player1;
+  }
+  this.textContent === ""
+    ? (this.textContent = player.symbol)
+    : this.textContent;
   boardObject[this.classList.value] = player.symbol;
-  console.log(boardObject);
+  checkForWinner(player);
+  player.isTurn = false;
+  opponent.isTurn = true;
+}
+
+function checkForWinner(player) {
+  if (
+    boardObject["row1Col1"].value === boardObject["row1Col2"].value &&
+    boardObject["row1Col1"].value === boardObject["row1Col3"].value
+  ) {
+    console.log(`${player.symbol} is the winner`);
+  }
 }
 
 const board = [
