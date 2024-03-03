@@ -17,7 +17,10 @@ class Player {
 const player1 = new Player("X");
 const player2 = new Player("O");
 
+let numOfMoves = 0;
+
 function move() {
+  numOfMoves++;
   let player;
   let opponent;
   if (player1.isTurn) {
@@ -31,18 +34,20 @@ function move() {
     ? (this.textContent = player.symbol)
     : this.textContent;
   boardObject[this.classList.value] = player.symbol;
-  checkForWinner(player);
+  numOfMoves > 3 && checkForWinner(player);
   player.isTurn = false;
   opponent.isTurn = true;
 }
 
 function checkForWinner(player) {
-  if (
-    boardObject["row1Col1"] === boardObject["row1Col2"] &&
-    boardObject["row1Col1"] === boardObject["row1Col3"]
-  ) {
-    console.log(`${player.symbol} is the winner`);
-    resetBoardObject();
+  if (boardObject.key !== "") {
+    if (
+      boardObject["row1Col1"] === boardObject["row1Col2"] &&
+      boardObject["row1Col1"] === boardObject["row1Col3"]
+    ) {
+      console.log(`${player.symbol} is the winner`);
+      resetBoardObject();
+    }
   }
 }
 
@@ -56,6 +61,7 @@ function clearBoard() {
   squares.forEach(function (square) {
     square.textContent = "";
   });
+  player1.isTurn = true;
 }
 
 const board = [
