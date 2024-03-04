@@ -101,7 +101,10 @@ class Game {
   }
 
   initGame() {
-    this.resetBtn.addEventListener("click", () => this.gameBoard.clearBoard());
+    this.resetBtn.addEventListener("click", () => {
+      this.gameBoard.clearBoard();
+      this.gameBoard.initBoard();
+    });
     this.newGameBtn.addEventListener("click", () => this.newGame());
     this.gameBoard.initBoard();
   }
@@ -111,21 +114,25 @@ class Game {
     this.gameBoard.player1.reset();
     this.gameBoard.player2.reset();
     this.gameBoard.displayScore();
+    this.gameBoard.initBoard();
   }
 
   checkForWinner(player) {
     const winConditions = [
+      // Check rows
       [0, 1, 2],
       [3, 4, 5],
-      [6, 7, 8], // Check rows
+      [6, 7, 8],
+      // Check columns
       [0, 3, 6],
       [1, 4, 7],
-      [2, 5, 8], // Check columns
+      [2, 5, 8],
+      // Check diagonals
       [0, 4, 8],
-      [2, 4, 6], // Check diagonals
+      [2, 4, 6],
     ];
-    const flatBoard = this.gameBoard.board.flat();
 
+    const flatBoard = this.gameBoard.board.flat();
     const playerWon = winConditions.some((condition) => {
       return condition.every((index) => {
         const [row, col] = [Math.floor(index / 3), index % 3];
@@ -137,13 +144,14 @@ class Game {
       result.textContent = `${player.name} is the winner`;
       player.score++;
       this.gameBoard.displayScore();
+      this.endRound();
     } else if (flatBoard.every((cell) => cell !== "")) {
       result.textContent = "It's a tie";
     }
   }
 
   endRound() {
-    squares.forEach((square) => {
+    document.querySelectorAll(".board>div").forEach((square) => {
       square.removeEventListener("click", this.gameBoard.matchPositionBound);
     });
   }
