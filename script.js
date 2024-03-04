@@ -1,3 +1,5 @@
+const player1Score = document.querySelector(".score.player1");
+const player2Score = document.querySelector(".score.player2");
 const squares = document.querySelectorAll(".board>div");
 const result = document.querySelector(".result");
 const resetBtn = document.querySelector(".reset");
@@ -15,14 +17,16 @@ const board = [
 ];
 
 class Player {
-  constructor(symbol) {
+  constructor(symbol, scoreBoard) {
     this.symbol = symbol;
     this.isTurn = true;
+    this.score = 0;
+    this.scoreBoard = scoreBoard;
   }
 }
 
-const player1 = new Player("X");
-const player2 = new Player("O");
+const player1 = new Player("X", player1Score);
+const player2 = new Player("O", player2Score);
 
 function move() {
   let player;
@@ -54,12 +58,16 @@ function checkForWinner(player) {
   for (let i = 0; i < 3; i++) {
     if (board.every((row) => !row.includes(""))) {
       result.textContent = "It's a tie";
+      endRound();
     }
     if (
       board[i].every((cell) => cell === player.symbol) || // Check rows
       board.every((row) => row[i] === player.symbol) // Check columns
     ) {
       result.textContent = `${player.symbol} is the winner`;
+      player.score++;
+      displayScore();
+      endRound();
     }
     if (
       [...Array(3).keys()].every(
@@ -70,11 +78,22 @@ function checkForWinner(player) {
       )
     ) {
       result.textContent = `${player.symbol} is the winner`;
+      player.score++;
+      displayScore();
+      endRound();
     }
   }
 }
 
+function displayScore() {
+  player1Score.textContent = `Player 1: ${player1.score}`;
+  player2Score.textContent = `Player 2: ${player2.score}`;
+}
+
 function clearBoard() {
+  squares.forEach(function (square) {
+    square.addEventListener("click", move);
+  });
   squares.forEach(function (square) {
     square.textContent = "";
   });
@@ -86,4 +105,10 @@ function clearBoard() {
   player1.isTurn = true;
   player2.isTurn = false;
   result.textContent = "";
+}
+
+function endRound() {
+  squares.forEach(function (square) {
+    square.removeEventListener("click", move);
+  });
 }
