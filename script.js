@@ -55,11 +55,11 @@ function move() {
 }
 
 function checkForWinner(player) {
+  if (board.every((row) => !row.includes(""))) {
+    result.textContent = "It's a tie";
+    endRound();
+  }
   for (let i = 0; i < 3; i++) {
-    if (board.every((row) => !row.includes(""))) {
-      result.textContent = "It's a tie";
-      endRound();
-    }
     if (
       board[i].every((cell) => cell === player.symbol) || // Check rows
       board.every((row) => row[i] === player.symbol) // Check columns
@@ -68,20 +68,22 @@ function checkForWinner(player) {
       player.score++;
       displayScore();
       endRound();
+      return;
     }
-    if (
-      [...Array(3).keys()].every(
-        (index) => board[index][index] === player.symbol // Left to right diagonal
-      ) ||
-      [...Array(3).keys()].every(
-        (index) => board[index][2 - index] === player.symbol // Right to left diagonal
-      )
-    ) {
-      result.textContent = `${player.symbol} is the winner`;
-      player.score++;
-      displayScore();
-      endRound();
-    }
+  }
+  if (
+    [...Array(3).keys()].every(
+      (index) => board[index][index] === player.symbol // Left to right diagonal
+    ) ||
+    [...Array(3).keys()].every(
+      (index) => board[index][2 - index] === player.symbol // Right to left diagonal
+    )
+  ) {
+    result.textContent = `${player.symbol} is the winner`;
+    console.log("test");
+    player.score++;
+    displayScore();
+    endRound();
   }
 }
 
