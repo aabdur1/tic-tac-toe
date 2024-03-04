@@ -52,6 +52,9 @@ function move() {
 
 function checkForWinner(player) {
   for (let i = 0; i < 3; i++) {
+    if (board.every((row) => !row.includes(""))) {
+      result.textContent = "It's a tie";
+    }
     if (
       board[i].every((cell) => cell === player.symbol) || // Check rows
       board.every((row) => row[i] === player.symbol) // Check columns
