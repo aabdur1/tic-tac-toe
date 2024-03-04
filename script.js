@@ -17,10 +17,7 @@ class Player {
 const player1 = new Player("X");
 const player2 = new Player("O");
 
-let numOfMoves = 0;
-
 function move() {
-  numOfMoves++;
   let player;
   let opponent;
   if (player1.isTurn) {
@@ -30,30 +27,18 @@ function move() {
     player = player2;
     opponent = player1;
   }
-  this.textContent === ""
-    ? (this.textContent = player.symbol)
-    : this.textContent;
-  boardObject[this.classList.value] = player.symbol;
-  numOfMoves > 3 && checkForWinner(player);
-  player.isTurn = false;
-  opponent.isTurn = true;
-}
 
-function checkForWinner(player) {
-  if (boardObject.key !== "") {
-    if (
-      boardObject["row1Col1"] === boardObject["row1Col2"] &&
-      boardObject["row1Col1"] === boardObject["row1Col3"]
-    ) {
-      console.log(`${player.symbol} is the winner`);
-      resetBoardObject();
+  const className = this.classList.value;
+  const positionMatch = className.match(/row(\d)Col(\d)/);
+  if (positionMatch) {
+    const rowIndex = parseInt(positionMatch[1], 10) - 1;
+    const colIndex = parseInt(positionMatch[2], 10) - 1;
+    if (board[rowIndex][colIndex] === "") {
+      board[rowIndex][colIndex] = player.symbol;
+      this.textContent = player.symbol;
     }
-  }
-}
-
-function resetBoardObject() {
-  for (let key in boardObject) {
-    boardObject[key] = "";
+    player.isTurn = false;
+    opponent.isTurn = true;
   }
 }
 
@@ -61,7 +46,11 @@ function clearBoard() {
   squares.forEach(function (square) {
     square.textContent = "";
   });
-  player1.isTurn = true;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      board[i][j] = "";
+    }
+  }
 }
 
 const board = [
@@ -69,18 +58,3 @@ const board = [
   ["", "", ""],
   ["", "", ""],
 ];
-
-const boardObject = {};
-
-board.forEach((row, rowIndex) => {
-  row.forEach((cell, colIndex) => {
-    const key = `row${rowIndex + 1}Col${colIndex + 1}`;
-    boardObject[key] = cell;
-  });
-});
-
-for (let i = 0; i < 3; i++) {
-  for (let j = 0; j < 3; j++) {
-    board[i][j] = `${i} ${j}`;
-  }
-}
