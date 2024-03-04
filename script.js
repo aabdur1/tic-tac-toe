@@ -17,7 +17,7 @@ class Player {
 
   reset() {
     this.score = 0;
-    this.isTurn = false;
+    this.isTurn = this.scoreBoard === player1Score ? true : false;
     this.updateScore();
   }
 }
