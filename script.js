@@ -1,4 +1,5 @@
 const squares = document.querySelectorAll(".board>div");
+const result = document.querySelector(".result");
 const resetBtn = document.querySelector(".reset");
 
 squares.forEach(function (square) {
@@ -55,8 +56,8 @@ function checkForWinner(player) {
       board[i].every((cell) => cell === player.symbol) ||
       board.every((row) => row[i] === player.symbol)
     ) {
-      console.log(`${player.symbol} is the winner`);
-      clearBoard();
+      result.textContent = `${player.symbol} is the winner`;
+      // clearBoard();
     }
   }
 }
@@ -72,4 +73,5 @@ function clearBoard() {
   }
   player1.isTurn = true;
   player2.isTurn = false;
+  result.textContent = "";
 }

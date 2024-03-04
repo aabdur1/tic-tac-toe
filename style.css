@@ -14,6 +14,14 @@ body {
   font-size: 4rem;
 }
 
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 1rem;
+  align-items: center;
+}
+
 .board {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -48,4 +56,20 @@ body {
 
 .row2Col2 {
   border: 0.5rem solid;
+}
+
+.result {
+  height: 3rem;
+  font-size: 2rem;
+}
+
+.reset {
+  color: #fecdd3;
+  background-color: #000000;
+  font-family: inherit;
+  font-size: 1rem;
+  border: none;
+  padding: 0.5rem;
+  width: 5rem;
+  cursor: pointer;
 }
