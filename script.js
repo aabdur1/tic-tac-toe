@@ -7,6 +7,12 @@ squares.forEach(function (square) {
 
 resetBtn.addEventListener("click", clearBoard);
 
+const board = [
+  ["", "", ""],
+  ["", "", ""],
+  ["", "", ""],
+];
+
 class Player {
   constructor(symbol) {
     this.symbol = symbol;
@@ -36,9 +42,9 @@ function move() {
     if (board[rowIndex][colIndex] === "") {
       board[rowIndex][colIndex] = player.symbol;
       this.textContent = player.symbol;
+      player.isTurn = false;
+      opponent.isTurn = true;
     }
-    player.isTurn = false;
-    opponent.isTurn = true;
   }
 }
 
@@ -51,10 +57,6 @@ function clearBoard() {
       board[i][j] = "";
     }
   }
+  player1.isTurn = true;
+  player2.isTurn = false;
 }
-
-const board = [
-  ["", "", ""],
-  ["", "", ""],
-  ["", "", ""],
-];
