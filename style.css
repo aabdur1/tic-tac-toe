@@ -71,13 +71,19 @@ body {
   font-size: 2rem;
 }
 
-.reset {
+.btns {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+button {
   color: #fecdd3;
   background-color: #000000;
   font-family: inherit;
   font-size: 1rem;
   border: none;
   padding: 0.5rem;
-  width: 5rem;
+  width: 7rem;
   cursor: pointer;
 }

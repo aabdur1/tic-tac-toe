@@ -3,11 +3,13 @@ const player2Score = document.querySelector(".score.player2");
 const squares = document.querySelectorAll(".board>div");
 const result = document.querySelector(".result");
 const resetBtn = document.querySelector(".reset");
+const newGameBtn = document.querySelector(".newGame");
 
 squares.forEach(function (square) {
   square.addEventListener("click", move);
 });
 
+newGameBtn.addEventListener("click", newGame);
 resetBtn.addEventListener("click", clearBoard);
 
 const board = [
@@ -80,7 +82,6 @@ function checkForWinner(player) {
     )
   ) {
     result.textContent = `${player.symbol} is the winner`;
-    console.log("test");
     player.score++;
     displayScore();
     endRound();
@@ -90,6 +91,13 @@ function checkForWinner(player) {
 function displayScore() {
   player1Score.textContent = `Player 1: ${player1.score}`;
   player2Score.textContent = `Player 2: ${player2.score}`;
+}
+
+function newGame() {
+  player1.score = 0;
+  player2.score = 0;
+  displayScore();
+  clearBoard();
 }
 
 function clearBoard() {
