@@ -63,7 +63,7 @@ function checkForWinner(player) {
         (index) => board[index][index] === player.symbol // Left to right diagonal
       ) ||
       [...Array(3).keys()].every(
-        (index) => board[index][3 - 1 - index] === player.symbol // Right to left diagonal
+        (index) => board[index][2 - index] === player.symbol // Right to left diagonal
       )
     ) {
       result.textContent = `${player.symbol} is the winner`;
