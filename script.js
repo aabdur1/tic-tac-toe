@@ -19,7 +19,8 @@ const board = [
 ];
 
 class Player {
-  constructor(symbol, scoreBoard) {
+  constructor(name, symbol, scoreBoard) {
+    this.name = name;
     this.symbol = symbol;
     this.isTurn = true;
     this.score = 0;
@@ -27,8 +28,8 @@ class Player {
   }
 }
 
-const player1 = new Player("X", player1Score);
-const player2 = new Player("O", player2Score);
+const player1 = new Player("Player 1", "X", player1Score);
+const player2 = new Player("Player 2", "O", player2Score);
 
 function move() {
   let player;
@@ -66,11 +67,10 @@ function checkForWinner(player) {
       board[i].every((cell) => cell === player.symbol) || // Check rows
       board.every((row) => row[i] === player.symbol) // Check columns
     ) {
-      result.textContent = `${player.symbol} is the winner`;
+      result.textContent = `${player.name} is the winner`;
       player.score++;
       displayScore();
       endRound();
-      return;
     }
   }
   if (
@@ -81,7 +81,7 @@ function checkForWinner(player) {
       (index) => board[index][2 - index] === player.symbol // Right to left diagonal
     )
   ) {
-    result.textContent = `${player.symbol} is the winner`;
+    result.textContent = `${player.name} is the winner`;
     player.score++;
     displayScore();
     endRound();
@@ -91,6 +91,12 @@ function checkForWinner(player) {
 function displayScore() {
   player1Score.textContent = `Player 1: ${player1.score}`;
   player2Score.textContent = `Player 2: ${player2.score}`;
+}
+
+function endRound() {
+  squares.forEach(function (square) {
+    square.removeEventListener("click", move);
+  });
 }
 
 function newGame() {
@@ -115,10 +121,4 @@ function clearBoard() {
   player1.isTurn = true;
   player2.isTurn = false;
   result.textContent = "";
-}
-
-function endRound() {
-  squares.forEach(function (square) {
-    square.removeEventListener("click", move);
-  });
 }
