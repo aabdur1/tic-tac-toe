@@ -44,6 +44,19 @@ function move() {
       this.textContent = player.symbol;
       player.isTurn = false;
       opponent.isTurn = true;
+      checkForWinner(player);
+    }
+  }
+}
+
+function checkForWinner(player) {
+  for (let i = 0; i < 3; i++) {
+    if (
+      board[i].every((cell) => cell === player.symbol) ||
+      board.every((row) => row[i] === player.symbol)
+    ) {
+      console.log(`${player.symbol} is the winner`);
+      clearBoard();
     }
   }
 }
