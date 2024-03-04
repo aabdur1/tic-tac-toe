@@ -6,119 +6,142 @@ const resetBtn = document.querySelector(".reset");
 const newGameBtn = document.querySelector(".newGame");
 
 squares.forEach(function (square) {
-  square.addEventListener("click", move);
+  square.addEventListener("click", gameBoard.matchPosition);
 });
 
-newGameBtn.addEventListener("click", newGame);
-resetBtn.addEventListener("click", clearBoard);
-
-const board = [
-  ["", "", ""],
-  ["", "", ""],
-  ["", "", ""],
-];
+newGameBtn.addEventListener("click", game.newGame);
+resetBtn.addEventListener("click", gameBoard.clearBoard);
 
 class Player {
-  constructor(name, symbol, scoreBoard) {
+  constructor(name, symbol, isTurn, scoreBoard) {
     this.name = name;
     this.symbol = symbol;
-    this.isTurn = true;
+    this.isTurn = isTurn;
     this.score = 0;
     this.scoreBoard = scoreBoard;
   }
 }
 
-const player1 = new Player("Player 1", "X", player1Score);
-const player2 = new Player("Player 2", "O", player2Score);
+const player1 = new Player("Player 1", "X", true, player1Score);
+const player2 = new Player("Player 2", "O", false, player2Score);
 
-function move() {
-  let player;
-  let opponent;
-  if (player1.isTurn) {
-    player = player1;
-    opponent = player2;
-  } else {
-    player = player2;
-    opponent = player1;
+class GameBoard {
+  constructor(player1, player2) {
+    this.board = [
+      ["", "", ""],
+      ["", "", ""],
+      ["", "", ""],
+    ];
+    this.player1 = player1;
+    this.player2 = player2;
+    this.initBoard();
   }
 
-  const className = this.classList.value;
-  const positionMatch = className.match(/row(\d)Col(\d)/);
-  if (positionMatch) {
-    const rowIndex = parseInt(positionMatch[1], 10) - 1;
-    const colIndex = parseInt(positionMatch[2], 10) - 1;
-    if (board[rowIndex][colIndex] === "") {
-      board[rowIndex][colIndex] = player.symbol;
-      this.textContent = player.symbol;
+  initBoard() {
+    squares.forEach(function (square) {
+      square.addEventListener("click", this.matchPosition.bind(this));
+    });
+  }
+
+  findCurrentPlayer() {
+    return this.player1.isTurn ? this.player1 : this.player2;
+  }
+
+  matchPosition(event) {
+    const player = this.findCurrentPlayer();
+    const opponent = player === this.player1 ? this.player2 : this.player1;
+
+    const [rowIndex, colIndex] = event.target.dataset.position
+      .split(",")
+      .map(Number);
+    if (this.board[rowIndex][colIndex] === "") {
+      this.board[rowIndex][colIndex] = player.symbol;
+      event.target.textContent = player.symbol;
       player.isTurn = false;
       opponent.isTurn = true;
-      checkForWinner(player);
+      game.checkForWinner(player);
     }
+  }
+
+  displayScore() {
+    this.player1.scoreBoard.textContent = `Player 1: ${this.player1.score}`;
+    this.player2.scoreBoard.textContent = `Player 2: ${this.player2.score}`;
+  }
+
+  clearBoard() {
+    squares.forEach(function (square) {
+      square.addEventListener("click", this.matchPosition.bind(this));
+    });
+    squares.forEach(function (square) {
+      square.textContent = "";
+    });
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        this.board[i][j] = "";
+      }
+    }
+    player1.isTurn = true;
+    player2.isTurn = false;
+    result.textContent = "";
   }
 }
 
-function checkForWinner(player) {
-  if (board.every((row) => !row.includes(""))) {
-    result.textContent = "It's a tie";
-    endRound();
+class Game {
+  constructor(gameBoard) {
+    this.gameBoard = gameBoard;
+    this.initGame();
   }
-  for (let i = 0; i < 3; i++) {
-    if (
-      board[i].every((cell) => cell === player.symbol) || // Check rows
-      board.every((row) => row[i] === player.symbol) // Check columns
-    ) {
+
+  initGame() {
+    resetBtn.addEventListener(
+      "click",
+      this.gameBoard.clearBoard.bind(this.gameBoard)
+    );
+    newGameBtn.addEventListener("click", this.newGame.bind(this));
+  }
+
+  checkForWinner(player) {
+    const winConditions = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8], // Check rows
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8], // Check columns
+      [0, 4, 8],
+      [2, 4, 6], // Check diagonals
+    ];
+    const flatBoard = this.gameBoard.board.flat();
+
+    const playerWon = winConditions.some((condition) => {
+      return condition.every((index) => {
+        const [row, col] = [Math.floor(index / 3), index % 3];
+        return this.gameBoard.board[row][col] === player.symbol;
+      });
+    });
+
+    if (playerWon) {
       result.textContent = `${player.name} is the winner`;
       player.score++;
-      displayScore();
-      endRound();
+      this.gameBoard.displayScore();
+    } else if (flatBoard.every((cell) => cell !== "")) {
+      result.textContent = "It's a tie";
     }
   }
-  if (
-    [...Array(3).keys()].every(
-      (index) => board[index][index] === player.symbol // Left to right diagonal
-    ) ||
-    [...Array(3).keys()].every(
-      (index) => board[index][2 - index] === player.symbol // Right to left diagonal
-    )
-  ) {
-    result.textContent = `${player.name} is the winner`;
-    player.score++;
-    displayScore();
-    endRound();
+
+  endRound() {
+    squares.forEach(function (square) {
+      square.removeEventListener("click", this.matchPosition.bind(this));
+    });
+  }
+
+  newGame() {
+    this.gameBoard.displayScore();
+    player1.score = 0;
+    player2.score = 0;
+    this.gameBoard.clearBoard();
   }
 }
 
-function displayScore() {
-  player1Score.textContent = `Player 1: ${player1.score}`;
-  player2Score.textContent = `Player 2: ${player2.score}`;
-}
-
-function endRound() {
-  squares.forEach(function (square) {
-    square.removeEventListener("click", move);
-  });
-}
-
-function newGame() {
-  player1.score = 0;
-  player2.score = 0;
-  displayScore();
-  clearBoard();
-}
-
-function clearBoard() {
-  squares.forEach(function (square) {
-    square.addEventListener("click", move);
-  });
-  squares.forEach(function (square) {
-    square.textContent = "";
-  });
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      board[i][j] = "";
-    }
-  }
-  player1.isTurn = true;
-  player2.isTurn = false;
-  result.textContent = "";
-}
+const gameBoard = new GameBoard(player1, player2);
+const game = new Game(3);
