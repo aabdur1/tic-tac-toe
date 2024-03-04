@@ -5,13 +5,6 @@ const result = document.querySelector(".result");
 const resetBtn = document.querySelector(".reset");
 const newGameBtn = document.querySelector(".newGame");
 
-squares.forEach(function (square) {
-  square.addEventListener("click", gameBoard.matchPosition);
-});
-
-newGameBtn.addEventListener("click", game.newGame);
-resetBtn.addEventListener("click", gameBoard.clearBoard);
-
 class Player {
   constructor(name, symbol, isTurn, scoreBoard) {
     this.name = name;
@@ -26,7 +19,7 @@ const player1 = new Player("Player 1", "X", true, player1Score);
 const player2 = new Player("Player 2", "O", false, player2Score);
 
 class GameBoard {
-  constructor(player1, player2) {
+  constructor(player1, player2, game) {
     this.board = [
       ["", "", ""],
       ["", "", ""],
@@ -34,12 +27,14 @@ class GameBoard {
     ];
     this.player1 = player1;
     this.player2 = player2;
+    this.game = game;
+    this.matchPositionBound = this.matchPosition.bind(this);
     this.initBoard();
   }
 
   initBoard() {
-    squares.forEach(function (square) {
-      square.addEventListener("click", this.matchPosition.bind(this));
+    squares.forEach((square) => {
+      square.addEventListener("click", this.matchPositionBound);
     });
   }
 
@@ -51,16 +46,24 @@ class GameBoard {
     const player = this.findCurrentPlayer();
     const opponent = player === this.player1 ? this.player2 : this.player1;
 
-    const [rowIndex, colIndex] = event.target.dataset.position
-      .split(",")
-      .map(Number);
-    if (this.board[rowIndex][colIndex] === "") {
-      this.board[rowIndex][colIndex] = player.symbol;
-      event.target.textContent = player.symbol;
-      player.isTurn = false;
-      opponent.isTurn = true;
-      game.checkForWinner(player);
+    const className = event.target.classList.value;
+    const positionMatch = className.match(/row(\d)Col(\d)/);
+    if (positionMatch) {
+      const rowIndex = parseInt(positionMatch[1], 10) - 1;
+      const colIndex = parseInt(positionMatch[2], 10) - 1;
+
+      if (this.board[rowIndex][colIndex] === "") {
+        this.board[rowIndex][colIndex] = player.symbol;
+        event.target.textContent = player.symbol;
+        player.isTurn = false;
+        opponent.isTurn = true;
+        this.checkWinner(player);
+      }
     }
+  }
+
+  setCheckWinnerCallback(callback) {
+    this.checkWinner = callback;
   }
 
   displayScore() {
@@ -69,9 +72,6 @@ class GameBoard {
   }
 
   clearBoard() {
-    squares.forEach(function (square) {
-      square.addEventListener("click", this.matchPosition.bind(this));
-    });
     squares.forEach(function (square) {
       square.textContent = "";
     });
@@ -93,11 +93,15 @@ class Game {
   }
 
   initGame() {
-    resetBtn.addEventListener(
-      "click",
-      this.gameBoard.clearBoard.bind(this.gameBoard)
-    );
-    newGameBtn.addEventListener("click", this.newGame.bind(this));
+    resetBtn.addEventListener("click", () => this.gameBoard.clearBoard());
+    newGameBtn.addEventListener("click", () => this.newGame());
+  }
+
+  newGame() {
+    this.gameBoard.clearBoard().displayScore();
+    player1.score = 0;
+    player2.score = 0;
+    this.gameBoard.displayScore();
   }
 
   checkForWinner(player) {
@@ -130,18 +134,40 @@ class Game {
   }
 
   endRound() {
-    squares.forEach(function (square) {
-      square.removeEventListener("click", this.matchPosition.bind(this));
+    squares.forEach((square) => {
+      square.removeEventListener("click", this.gameBoard.matchPositionBound);
     });
-  }
-
-  newGame() {
-    this.gameBoard.displayScore();
-    player1.score = 0;
-    player2.score = 0;
-    this.gameBoard.clearBoard();
   }
 }
 
-const gameBoard = new GameBoard(player1, player2);
-const game = new Game(3);
+document.addEventListener("DOMContentLoaded", () => {
+  const player1Score = document.querySelector(".score.player1");
+  const player2Score = document.querySelector(".score.player2");
+  const squares = document.querySelectorAll(".board>div");
+  const result = document.querySelector(".result");
+  const resetBtn = document.querySelector(".reset");
+  const newGameBtn = document.querySelector(".newGame");
+  const player1 = new Player(
+    "Player 1",
+    "X",
+    true,
+    document.querySelector(".score.player1")
+  );
+  const player2 = new Player(
+    "Player 2",
+    "O",
+    false,
+    document.querySelector(".score.player2")
+  );
+  const gameBoard = new GameBoard(player1, player2);
+  const game = new Game(gameBoard);
+
+  gameBoard.setCheckWinnerCallback((player) => game.checkForWinner(player));
+
+  squares.forEach(function (square) {
+    square.addEventListener("click", gameBoard.matchPositionBound);
+  });
+
+  newGameBtn.addEventListener("click", () => game.newGame());
+  resetBtn.addEventListener("click", () => gameBoard.clearBoard());
+});
