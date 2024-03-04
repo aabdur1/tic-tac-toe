@@ -53,11 +53,20 @@ function move() {
 function checkForWinner(player) {
   for (let i = 0; i < 3; i++) {
     if (
-      board[i].every((cell) => cell === player.symbol) ||
-      board.every((row) => row[i] === player.symbol)
+      board[i].every((cell) => cell === player.symbol) || // Check rows
+      board.every((row) => row[i] === player.symbol) // Check columns
     ) {
       result.textContent = `${player.symbol} is the winner`;
-      // clearBoard();
+    }
+    if (
+      [...Array(3).keys()].every(
+        (index) => board[index][index] === player.symbol // Left to right diagonal
+      ) ||
+      [...Array(3).keys()].every(
+        (index) => board[index][3 - 1 - index] === player.symbol // Right to left diagonal
+      )
+    ) {
+      result.textContent = `${player.symbol} is the winner`;
     }
   }
 }
