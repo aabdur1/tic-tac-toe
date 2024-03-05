@@ -8,6 +8,7 @@ body {
   font-family: "carbona-variable", sans-serif;
   font-variation-settings: "MONO" 30, "slnt" 0, "wght" 600;
   background-color: #fecdd3;
+  margin: 1rem;
 }
 
 .header {
