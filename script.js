@@ -62,6 +62,9 @@ class GameBoard {
         player.isTurn = false;
         opponent.isTurn = true;
         this.game.checkForWinner(player);
+        if (this.player2.isComputer && this.player2.isTurn) {
+          this.game.bestMove();
+        }
       }
     }
   }
@@ -107,8 +110,8 @@ class Game {
 
   newGame() {
     this.gameBoard.clearBoard();
-    this.gameBoard.player1.reset();
-    this.gameBoard.player2.reset();
+    this.player1.reset();
+    this.player2.reset();
     this.gameBoard.displayScore();
     this.gameBoard.initBoard();
   }
@@ -152,33 +155,85 @@ class Game {
   checkForWinner(player) {
     const outcome = this.determineOutcome(player);
 
-    if (this.player2.isComputer) {
-      if (outcome === player.symbol) {
-        return player === this.player2 ? 1 : -1;
-      } else if (outcome === "tie") {
-        return 0;
-      }
-    }
-
     if (outcome === player.symbol) {
       result.textContent = `${player.name} is the winner`;
       player.score++;
       this.gameBoard.displayScore();
-      this.endRound();
     } else if (outcome === "tie") {
       result.textContent = "It's a tie";
-      this.endRound();
+    }
+    this.endRound();
+  }
+
+  minimax(isMaximizing) {
+    let player = isMaximizing ? this.player2 : this.player1;
+    let opponent = isMaximizing ? this.player1 : this.player2;
+    let score = {
+      X: -1,
+      O: 1,
+      tie: 0,
+    };
+    let result = this.determineOutcome(player);
+    if (result !== null) {
+      return score[result];
+    }
+
+    if (isMaximizing) {
+      let bestScore = -Infinity;
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (this.gameBoard.board[i][j] === "") {
+            this.gameBoard.board[i][j] = player.symbol;
+            let score = this.minimax(false);
+            this.gameBoard.board[i][j] = "";
+            bestScore = Math.max(score, bestScore);
+          }
+        }
+      }
+      return bestScore;
+    } else {
+      let bestScore = Infinity;
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (this.gameBoard.board[i][j] === "") {
+            this.gameBoard.board[i][j] = opponent.symbol;
+            let score = this.minimax(true);
+            this.gameBoard.board[i][j] = "";
+            bestScore = Math.min(score, bestScore);
+          }
+        }
+      }
+      return bestScore;
     }
   }
 
-  // minimax(board, depth, isMaximizing) {
-  //   let score = {
-  //     X: -1,
-  //     O: 1,
-  //     tie: 0,
-  //   };
-  //   let result = this.checkForWinner(this.player2);
-  // }
+  bestMove() {
+    console.log(this.gameBoard.board);
+    let bestScore = -Infinity;
+    let move = null;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (this.gameBoard.board[i][j] === "") {
+          this.gameBoard.board[i][j] = this.player2.symbol;
+          let score = this.minimax(false);
+          this.gameBoard.board[i][j] = "";
+          if (score > bestScore) {
+            bestScore = score;
+            move = { i, j };
+          }
+        }
+      }
+    }
+
+    if (move !== null) {
+      this.gameBoard.board[move.i][move.j] = this.player2.symbol;
+      document.querySelector(`.row${move.i + 1}Col${move.j + 1}`).textContent =
+        this.player2.symbol;
+      this.player1.isTurn = true;
+      this.player2.isTurn = false;
+      this.checkForWinner(this.player2);
+    }
+  }
 
   endRound() {
     document.querySelectorAll(".board>div").forEach((square) => {
@@ -191,6 +246,6 @@ class Game {
 
 document.addEventListener("DOMContentLoaded", () => {
   const player1 = new Player("Player 1", "X", true, player1Score);
-  const player2 = new Player("Player 2", "O", false, player2Score);
+  const player2 = new Player("Player 2", "O", false, player2Score, true);
   new Game(player1, player2);
 });
