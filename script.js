@@ -185,7 +185,7 @@ class Game {
 
   minimax(isMaximizing) {
     let player = isMaximizing ? this.player2 : this.player1;
-    let opponent = isMaximizing ? this.player1 : this.player2;
+    let opponent = !isMaximizing ? this.player1 : this.player2;
     let score = {
       X: -1,
       O: 1,
@@ -201,8 +201,8 @@ class Game {
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
           if (this.gameBoard.board[i][j] === "") {
-            this.gameBoard.board[i][j] = player.symbol;
-            let score = this.minimax(!isMaximizing);
+            this.gameBoard.board[i][j] = this.player2.symbol;
+            let score = this.minimax(false);
             this.gameBoard.board[i][j] = "";
             bestScore = Math.max(score, bestScore);
           }
@@ -214,7 +214,7 @@ class Game {
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
           if (this.gameBoard.board[i][j] === "") {
-            this.gameBoard.board[i][j] = opponent.symbol;
+            this.gameBoard.board[i][j] = this.player1.symbol;
             let score = this.minimax(true);
             this.gameBoard.board[i][j] = "";
             bestScore = Math.min(score, bestScore);
@@ -232,11 +232,12 @@ class Game {
       for (let j = 0; j < 3; j++) {
         if (this.gameBoard.board[i][j] === "") {
           this.gameBoard.board[i][j] = this.player2.symbol;
-          let score = this.minimax(true);
+          let score = this.minimax(false);
           this.gameBoard.board[i][j] = "";
           if (score > bestScore) {
             bestScore = score;
             move = { i, j };
+            console.log(move);
           }
         }
       }
