@@ -33,12 +33,13 @@ class GameBoard {
     this.player1 = player1;
     this.player2 = player2;
     this.game = gameInstance;
+    this.handleClick = this.matchPosition.bind(this);
     this.initBoard();
   }
 
   initBoard() {
     document.querySelectorAll(".board>div").forEach((square) => {
-      square.addEventListener("click", (event) => this.matchPosition(event));
+      square.addEventListener("click", this.handleClick);
     });
   }
 
@@ -61,7 +62,7 @@ class GameBoard {
         event.target.textContent = player.symbol;
         player.isTurn = false;
         opponent.isTurn = true;
-        this.game.checkForWinner(player);
+        this.game.checkForWinner();
         if (this.player2.isComputer && this.player2.isTurn) {
           this.game.bestMove();
         }
@@ -86,6 +87,12 @@ class GameBoard {
     this.player1.isTurn = true;
     this.player2.isTurn = false;
     result.textContent = "";
+  }
+
+  clearListeners() {
+    document.querySelectorAll(".board>div").forEach((square) => {
+      square.removeEventListener("click", this.handleClick);
+    });
   }
 }
 
@@ -116,7 +123,7 @@ class Game {
     this.gameBoard.initBoard();
   }
 
-  determineOutcome(player) {
+  determineOutcome() {
     const winConditions = [
       // Check rows
       [0, 1, 2],
@@ -137,11 +144,17 @@ class Game {
       });
 
       if (
-        this.gameBoard.board[a.row][a.col] === player.symbol &&
-        this.gameBoard.board[b.row][b.col] === player.symbol &&
-        this.gameBoard.board[c.row][c.col] === player.symbol
+        this.gameBoard.board[a.row][a.col] === "X" &&
+        this.gameBoard.board[b.row][b.col] === "X" &&
+        this.gameBoard.board[c.row][c.col] === "X"
       ) {
-        return player.symbol;
+        return this.player1.symbol;
+      } else if (
+        this.gameBoard.board[a.row][a.col] === "O" &&
+        this.gameBoard.board[b.row][b.col] === "O" &&
+        this.gameBoard.board[c.row][c.col] === "O"
+      ) {
+        return this.player2.symbol;
       }
     }
 
@@ -152,17 +165,22 @@ class Game {
     return null;
   }
 
-  checkForWinner(player) {
-    const outcome = this.determineOutcome(player);
-
-    if (outcome === player.symbol) {
-      result.textContent = `${player.name} is the winner`;
-      player.score++;
+  checkForWinner() {
+    const outcome = this.determineOutcome();
+    if (outcome === this.player1.symbol) {
+      result.textContent = `${this.player1.name} is the winner`;
+      this.player1.score++;
       this.gameBoard.displayScore();
+      this.endRound();
+    } else if (outcome === this.player2.symbol) {
+      result.textContent = `${this.player2.name} is the winner`;
+      this.player2.score++;
+      this.gameBoard.displayScore();
+      this.endRound();
     } else if (outcome === "tie") {
       result.textContent = "It's a tie";
+      this.endRound();
     }
-    this.endRound();
   }
 
   minimax(isMaximizing) {
@@ -173,7 +191,7 @@ class Game {
       O: 1,
       tie: 0,
     };
-    let result = this.determineOutcome(player);
+    let result = this.determineOutcome();
     if (result !== null) {
       return score[result];
     }
@@ -184,7 +202,7 @@ class Game {
         for (let j = 0; j < 3; j++) {
           if (this.gameBoard.board[i][j] === "") {
             this.gameBoard.board[i][j] = player.symbol;
-            let score = this.minimax(false);
+            let score = this.minimax(!isMaximizing);
             this.gameBoard.board[i][j] = "";
             bestScore = Math.max(score, bestScore);
           }
@@ -208,14 +226,13 @@ class Game {
   }
 
   bestMove() {
-    console.log(this.gameBoard.board);
     let bestScore = -Infinity;
     let move = null;
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         if (this.gameBoard.board[i][j] === "") {
           this.gameBoard.board[i][j] = this.player2.symbol;
-          let score = this.minimax(false);
+          let score = this.minimax(true);
           this.gameBoard.board[i][j] = "";
           if (score > bestScore) {
             bestScore = score;
@@ -231,16 +248,12 @@ class Game {
         this.player2.symbol;
       this.player1.isTurn = true;
       this.player2.isTurn = false;
-      this.checkForWinner(this.player2);
+      this.checkForWinner();
     }
   }
 
   endRound() {
-    document.querySelectorAll(".board>div").forEach((square) => {
-      square.removeEventListener("click", (event) =>
-        this.gameBoard.matchPosition(event)
-      );
-    });
+    this.gameBoard.clearListeners();
   }
 }
 
