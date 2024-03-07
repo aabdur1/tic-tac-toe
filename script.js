@@ -189,8 +189,6 @@ class Game {
   }
 
   minimax(isMaximizing) {
-    let player = isMaximizing ? this.player2 : this.player1;
-    let opponent = !isMaximizing ? this.player1 : this.player2;
     let score = {
       X: -1,
       O: 1,
