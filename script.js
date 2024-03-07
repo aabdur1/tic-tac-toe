@@ -103,6 +103,7 @@ class Game {
     this.gameBoard = new GameBoard(this.player1, this.player2, this);
     this.resetBtn = document.querySelector(".reset");
     this.newGameBtn = document.querySelector(".newGame");
+    this.aiBtn = document.querySelector(".ai");
     this.initGame();
   }
 
@@ -112,6 +113,10 @@ class Game {
       this.gameBoard.initBoard();
     });
     this.newGameBtn.addEventListener("click", () => this.newGame());
+    this.aiBtn.addEventListener(
+      "click",
+      () => (this.player2.isComputer = true)
+    );
     this.gameBoard.initBoard();
   }
 
@@ -260,6 +265,6 @@ class Game {
 
 document.addEventListener("DOMContentLoaded", () => {
   const player1 = new Player("Player 1", "X", true, player1Score);
-  const player2 = new Player("Player 2", "O", false, player2Score, true);
+  const player2 = new Player("Player 2", "O", false, player2Score);
   new Game(player1, player2);
 });
