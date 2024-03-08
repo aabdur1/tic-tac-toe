@@ -103,7 +103,7 @@ class Game {
     this.gameBoard = new GameBoard(this.player1, this.player2, this);
     this.resetBtn = document.querySelector(".reset");
     this.newGameBtn = document.querySelector(".newGame");
-    this.aiBtn = document.querySelector(".ai");
+    this.aiToggle = document.querySelector("#is-computer-toggle");
     this.initGame();
   }
 
@@ -113,7 +113,7 @@ class Game {
       this.gameBoard.initBoard();
     });
     this.newGameBtn.addEventListener("click", () => this.newGame());
-    this.aiBtn.addEventListener("click", () => {
+    this.aiToggle.addEventListener("change", () => {
       this.player2.isComputer = this.player2.isComputer ? false : true;
       this.newGame();
     });
