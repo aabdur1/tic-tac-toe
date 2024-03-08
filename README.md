@@ -1,2 +1,3 @@
 # tic-tac-toe
-Tic tac toe project for the Odin Project
+
+A simple tic tac toe game with an ai player that chooses moves using the minimax algorithm.
