@@ -18,7 +18,7 @@ class Player {
 
   reset() {
     this.score = 0;
-    this.isTurn = this.scoreBoard === player1Score ? true : false;
+    this.isTurn = this.name === "Player 1" ? true : false;
     this.updateScore();
   }
 }
@@ -113,10 +113,10 @@ class Game {
       this.gameBoard.initBoard();
     });
     this.newGameBtn.addEventListener("click", () => this.newGame());
-    this.aiBtn.addEventListener(
-      "click",
-      () => (this.player2.isComputer = true)
-    );
+    this.aiBtn.addEventListener("click", () => {
+      this.player2.isComputer = this.player2.isComputer ? false : true;
+      this.newGame();
+    });
     this.gameBoard.initBoard();
   }
 
@@ -240,7 +240,6 @@ class Game {
           if (score > bestScore) {
             bestScore = score;
             move = { i, j };
-            console.log(move);
           }
         }
       }
