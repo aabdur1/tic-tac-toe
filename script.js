@@ -115,6 +115,7 @@ class Game {
     this.newGameBtn.addEventListener("click", () => this.newGame());
     this.aiToggle.addEventListener("change", () => {
       this.player2.isComputer = this.player2.isComputer ? false : true;
+      this.player2.name = this.player2.isComputer ? "Computer" : "Player 2";
       this.newGame();
     });
     this.gameBoard.initBoard();
@@ -262,6 +263,6 @@ class Game {
 
 document.addEventListener("DOMContentLoaded", () => {
   const player1 = new Player("Player 1", "X", true, player1Score);
-  const player2 = new Player("Player 2", "O", false, player2Score);
+  const player2 = new Player("Computer", "O", false, player2Score, true);
   new Game(player1, player2);
 });
