@@ -1,6 +1,6 @@
 body {
   display: grid;
-  grid-template-rows: 0.2fr 1fr;
+  grid-template-rows: 0.18fr 1fr;
   width: 100dvw;
   height: 90dvh;
   justify-items: center;
@@ -33,6 +33,11 @@ body {
   font-variation-settings: "MONO" 100, "slnt" 0, "wght" 300;
 }
 
+input[type="checkbox"]:hover,
+label:hover {
+  cursor: pointer;
+}
+
 .scoreBoard {
   width: 100%;
   height: 3rem;
@@ -42,44 +47,137 @@ body {
 }
 
 .board {
+  background-color: #000000;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
-  gap: 0;
+  gap: 5px;
   justify-items: center;
   align-items: center;
   font-size: 5rem;
 }
 
 .board > div {
+  background-color: #fecdd3;
   width: 5rem;
   height: 5rem;
   text-align: center;
   padding: 1rem;
+  padding-top: 1.5rem;
   margin: 0;
   cursor: pointer;
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
 }
 
-.row1Col2,
-.row3Col2 {
-  border-inline: 0.5rem solid;
-}
-
-.row2Col1,
-.row2Col3 {
-  border-block: 0.5rem solid;
-}
-
-.row2Col2 {
-  border: 0.5rem solid;
+.board > div:hover {
+  background-color: #fda4af;
 }
 
 .result {
   height: 3rem;
   font-size: 2rem;
+  display: flex;
+  align-items: center;
+  padding-inline: 1rem;
+  margin-block: 1rem;
+  border-radius: 1rem;
+}
+
+@keyframes player1 {
+  0% {
+    box-shadow: 0 0 5px #7c3aed;
+    color: #818cf8;
+  }
+  50% {
+    box-shadow: 0 0 20px #818cf8;
+    color: #5b21b6;
+  }
+  100% {
+    box-shadow: 0 0 5px #a5b4fc;
+    color: #818cf8;
+  }
+}
+
+@keyframes player1cells {
+  0% {
+    color: #818cf8;
+  }
+  50% {
+    color: #5b21b6;
+  }
+  100% {
+    color: #818cf8;
+  }
+}
+
+@keyframes player2 {
+  0% {
+    box-shadow: 0 0 5px #06b6d4;
+    color: #38bdf8;
+  }
+  50% {
+    box-shadow: 0 0 20px #a5f3fc;
+    color: #1f2937;
+  }
+  100% {
+    box-shadow: 0 0 5px #06b6d4;
+    color: #38bdf8;
+  }
+}
+
+@keyframes player2cells {
+  0% {
+    color: #0e7490;
+  }
+  50% {
+    color: #ccfbf1;
+  }
+  100% {
+    color: #0e7490;
+  }
+}
+
+@keyframes tie {
+  0% {
+    box-shadow: 0 0 5px #e11d48;
+    color: #dc2626;
+  }
+  50% {
+    box-shadow: 0 0 20px #f43f5e;
+    color: #4c0519;
+  }
+  100% {
+    box-shadow: 0 0 5px #e11d48;
+    color: #dc2626;
+  }
+}
+
+.player1win {
+  animation: player1cells 2s infinite ease-in-out;
+}
+
+.player2win {
+  animation: player2cells 2s infinite ease-in-out;
+}
+
+.result.player1win {
+  background-image: linear-gradient(#e0e7ff, #f5d0fe);
+  animation: player1 2s infinite ease-in-out;
+  border: 3px solid;
+}
+
+.result.player2win {
+  background-image: linear-gradient(#fed7aa, #cffafe);
+  animation: player2 2s infinite ease-in-out;
+  border: 3px solid;
+}
+
+.result.tie-result {
+  background-image: linear-gradient(#f5f5f4, #a8a29e);
+  animation: tie 2s infinite ease-in-out;
+  border: 3px solid;
 }
 
 .btns {

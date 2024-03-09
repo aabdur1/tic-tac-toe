@@ -62,6 +62,7 @@ class GameBoard {
         event.target.textContent = player.symbol;
         player.isTurn = false;
         opponent.isTurn = true;
+        result.textContent = `${opponent.name}'s turn`;
         this.game.checkForWinner();
         if (this.player2.isComputer && this.player2.isTurn) {
           this.game.bestMove();
@@ -86,6 +87,10 @@ class GameBoard {
     }
     this.player1.isTurn = true;
     this.player2.isTurn = false;
+    result.classList.remove("player1win", "player2win", "tie-result");
+    document.querySelectorAll(".board>div").forEach(function (square) {
+      square.classList.remove("player1win", "player2win");
+    });
     result.textContent = "";
   }
 
@@ -154,36 +159,50 @@ class Game {
         this.gameBoard.board[b.row][b.col] === "X" &&
         this.gameBoard.board[c.row][c.col] === "X"
       ) {
-        return this.player1.symbol;
+        return { result: this.player1.symbol, winningCells: [a, b, c] };
       } else if (
         this.gameBoard.board[a.row][a.col] === "O" &&
         this.gameBoard.board[b.row][b.col] === "O" &&
         this.gameBoard.board[c.row][c.col] === "O"
       ) {
-        return this.player2.symbol;
+        return { result: this.player2.symbol, winningCells: [a, b, c] };
       }
     }
 
     if (this.gameBoard.board.flat().every((cell) => cell !== "")) {
-      return "tie";
+      return { result: "tie" };
     }
 
-    return null;
+    return { result: null };
   }
 
   checkForWinner() {
     const outcome = this.determineOutcome();
-    if (outcome === this.player1.symbol) {
+    if (outcome.result === this.player1.symbol) {
+      result.classList.add("player1win");
       result.textContent = `${this.player1.name} is the winner`;
+      console.log(outcome.winningCells);
+      for (let cell of outcome.winningCells) {
+        document
+          .querySelector(`.row${cell.row + 1}Col${cell.col + 1}`)
+          .classList.add("player1win");
+      }
       this.player1.score++;
       this.gameBoard.displayScore();
       this.endRound();
-    } else if (outcome === this.player2.symbol) {
+    } else if (outcome.result === this.player2.symbol) {
+      result.classList.add("player2win");
       result.textContent = `${this.player2.name} is the winner`;
+      for (let cell of outcome.winningCells) {
+        document
+          .querySelector(`.row${cell.row + 1}Col${cell.col + 1}`)
+          .classList.add("player2win");
+      }
       this.player2.score++;
       this.gameBoard.displayScore();
       this.endRound();
-    } else if (outcome === "tie") {
+    } else if (outcome.result === "tie") {
+      result.classList.add("tie-result");
       result.textContent = "It's a tie";
       this.endRound();
     }
@@ -195,9 +214,9 @@ class Game {
       O: 1,
       tie: 0,
     };
-    let result = this.determineOutcome();
-    if (result !== null) {
-      return score[result];
+    let outcome = this.determineOutcome();
+    if (outcome.result !== null) {
+      return score[outcome.result];
     }
 
     if (isMaximizing) {
@@ -252,6 +271,7 @@ class Game {
         this.player2.symbol;
       this.player1.isTurn = true;
       this.player2.isTurn = false;
+      result.textContent = "Player 1's turn";
       this.checkForWinner();
     }
   }
