@@ -46,6 +46,17 @@ label:hover {
   font-size: 1.3rem;
 }
 
+.edit-icon {
+  padding-left: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.player1:hover .edit-icon.active,
+.player2:hover .edit-icon.active {
+  opacity: 1;
+}
+
 .board {
   background-color: #000000;
   display: grid;
@@ -71,7 +82,7 @@ label:hover {
   align-items: center;
 }
 
-.board > div:hover {
+.board > div.empty:hover {
   background-color: #fda4af;
 }
 
@@ -81,7 +92,7 @@ label:hover {
   display: flex;
   align-items: center;
   padding-inline: 1rem;
-  margin-block: 1rem;
+  margin-block: 0.5rem;
   border-radius: 1rem;
 }
 
@@ -166,12 +177,14 @@ label:hover {
   background-image: linear-gradient(#e0e7ff, #f5d0fe);
   animation: player1 2s infinite ease-in-out;
   border: 3px solid;
+  margin-block: 0.25rem;
 }
 
 .result.player2win {
   background-image: linear-gradient(#fed7aa, #cffafe);
   animation: player2 2s infinite ease-in-out;
   border: 3px solid;
+  margin-block: 0.25rem;
 }
 
 .result.tie-result {

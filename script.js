@@ -1,5 +1,7 @@
 const player1Score = document.querySelector(".score.player1");
 const player2Score = document.querySelector(".score.player2");
+const player2Name = document.querySelector(".name.player2");
+const player2EditIcon = document.querySelector(".player2 .edit-icon");
 const result = document.querySelector(".result");
 
 class Player {
@@ -13,7 +15,7 @@ class Player {
   }
 
   updateScore() {
-    this.scoreBoard.textContent = `${this.name}: ${this.score}`;
+    this.scoreBoard.textContent = `: ${this.score}`;
   }
 
   reset() {
@@ -40,6 +42,7 @@ class GameBoard {
   initBoard() {
     document.querySelectorAll(".board>div").forEach((square) => {
       square.addEventListener("click", this.handleClick);
+      square.classList.add("empty");
     });
   }
 
@@ -60,6 +63,7 @@ class GameBoard {
       if (this.board[rowIndex][colIndex] === "") {
         this.board[rowIndex][colIndex] = player.symbol;
         event.target.textContent = player.symbol;
+        event.target.classList.remove("empty");
         player.isTurn = false;
         opponent.isTurn = true;
         result.textContent = `${opponent.name}'s turn`;
@@ -120,7 +124,15 @@ class Game {
     this.newGameBtn.addEventListener("click", () => this.newGame());
     this.aiToggle.addEventListener("change", () => {
       this.player2.isComputer = this.player2.isComputer ? false : true;
-      this.player2.name = this.player2.isComputer ? "Computer" : "Player 2";
+      player2Name.textContent = this.player2.isComputer
+        ? "Computer"
+        : "Player 2";
+      player2Name.contentEditable = this.player2.isComputer ? "false" : "true";
+      if (this.player2.isComputer) {
+        player2EditIcon.classList.remove("active");
+      } else {
+        player2EditIcon.classList.add("active");
+      }
       this.newGame();
     });
     this.gameBoard.initBoard();
