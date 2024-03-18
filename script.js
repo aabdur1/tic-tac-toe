@@ -279,11 +279,16 @@ class Game {
 
     if (move !== null) {
       this.gameBoard.board[move.i][move.j] = this.player2.symbol;
-      document.querySelector(`.row${move.i + 1}Col${move.j + 1}`).textContent =
-        this.player2.symbol;
+      const gameBoardSquare = document.querySelector(
+        `.row${move.i + 1}Col${move.j + 1}`
+      );
+      setTimeout(() => {
+        gameBoardSquare.textContent = this.player2.symbol;
+        result.textContent = "Player 1's turn";
+      }, 1000);
+      gameBoardSquare.classList.remove("empty");
       this.player1.isTurn = true;
       this.player2.isTurn = false;
-      result.textContent = "Player 1's turn";
       this.checkForWinner();
     }
   }
