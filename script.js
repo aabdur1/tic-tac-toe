@@ -55,7 +55,6 @@ class GameBoard {
     const opponent = player === this.player1 ? this.player2 : this.player1;
 
     const className = event.target.classList.value;
-    console.log(className);
     const positionMatch = className.match(/row(\d)Col(\d)/);
     if (positionMatch) {
       const rowIndex = parseInt(positionMatch[1], 10) - 1;
