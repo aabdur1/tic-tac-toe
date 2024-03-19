@@ -1,5 +1,6 @@
 const player1Score = document.querySelector(".score.player1");
 const player2Score = document.querySelector(".score.player2");
+const player1Name = document.querySelector(".name.player1");
 const player2Name = document.querySelector(".name.player2");
 const player2EditIcon = document.querySelector(".player2 .edit-icon");
 const result = document.querySelector(".result");
@@ -42,7 +43,6 @@ class GameBoard {
   initBoard() {
     document.querySelectorAll(".board>div").forEach((square) => {
       square.addEventListener("click", this.handleClick);
-      square.classList.add("empty");
     });
   }
 
@@ -55,6 +55,7 @@ class GameBoard {
     const opponent = player === this.player1 ? this.player2 : this.player1;
 
     const className = event.target.classList.value;
+    console.log(className);
     const positionMatch = className.match(/row(\d)Col(\d)/);
     if (positionMatch) {
       const rowIndex = parseInt(positionMatch[1], 10) - 1;
@@ -66,10 +67,26 @@ class GameBoard {
         event.target.classList.remove("empty");
         player.isTurn = false;
         opponent.isTurn = true;
-        result.textContent = `${opponent.name}'s turn`;
+        if (this.player2.isTurn) {
+          document.querySelectorAll(".board > div.empty").forEach((square) => {
+            square.classList.add("player-2-turn");
+          });
+        } else if (this.player1.isTurn) {
+          document.querySelectorAll(".board > div.empty").forEach((square) => {
+            square.classList.remove("player-2-turn");
+          });
+        }
+        result.textContent = `${
+          player === this.player1
+            ? player2Name.textContent
+            : player1Name.textContent
+        }'s turn`;
         this.game.checkForWinner();
         if (this.player2.isComputer && this.player2.isTurn) {
           this.game.bestMove();
+          document.querySelectorAll(".board > div.empty").forEach((square) => {
+            square.classList.remove("player-2-turn");
+          });
         }
       }
     }
@@ -83,6 +100,8 @@ class GameBoard {
   clearBoard() {
     document.querySelectorAll(".board>div").forEach(function (square) {
       square.textContent = "";
+      square.classList.add("empty");
+      square.classList.remove("player-2-turn");
     });
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
@@ -95,7 +114,7 @@ class GameBoard {
     document.querySelectorAll(".board>div").forEach(function (square) {
       square.classList.remove("player1win", "player2win");
     });
-    result.textContent = "";
+    result.textContent = `${player1Name.textContent}'s turn`;
   }
 
   clearListeners() {
@@ -135,6 +154,7 @@ class Game {
       }
       this.newGame();
     });
+    this.gameBoard.clearBoard();
     this.gameBoard.initBoard();
   }
 
@@ -192,24 +212,29 @@ class Game {
     const outcome = this.determineOutcome();
     if (outcome.result === this.player1.symbol) {
       result.classList.add("player1win");
-      result.textContent = `${this.player1.name} is the winner`;
-      console.log(outcome.winningCells);
+      result.textContent = `${player1Name.textContent} is the winner`;
       for (let cell of outcome.winningCells) {
         document
           .querySelector(`.row${cell.row + 1}Col${cell.col + 1}`)
           .classList.add("player1win");
       }
+      document.querySelectorAll(".board>div").forEach(function (square) {
+        square.classList.remove("empty");
+      });
       this.player1.score++;
       this.gameBoard.displayScore();
       this.endRound();
     } else if (outcome.result === this.player2.symbol) {
       result.classList.add("player2win");
-      result.textContent = `${this.player2.name} is the winner`;
+      result.textContent = `${player2Name.textContent} is the winner`;
       for (let cell of outcome.winningCells) {
         document
           .querySelector(`.row${cell.row + 1}Col${cell.col + 1}`)
           .classList.add("player2win");
       }
+      document.querySelectorAll(".board>div").forEach(function (square) {
+        square.classList.remove("empty");
+      });
       this.player2.score++;
       this.gameBoard.displayScore();
       this.endRound();
@@ -278,18 +303,20 @@ class Game {
     }
 
     if (move !== null) {
+      this.endRound();
       this.gameBoard.board[move.i][move.j] = this.player2.symbol;
       const gameBoardSquare = document.querySelector(
         `.row${move.i + 1}Col${move.j + 1}`
       );
       setTimeout(() => {
         gameBoardSquare.textContent = this.player2.symbol;
-        result.textContent = "Player 1's turn";
-      }, 1000);
-      gameBoardSquare.classList.remove("empty");
-      this.player1.isTurn = true;
-      this.player2.isTurn = false;
-      this.checkForWinner();
+        gameBoardSquare.classList.remove("empty");
+        this.player1.isTurn = true;
+        this.player2.isTurn = false;
+        result.textContent = `${player1Name.textContent}'s turn`;
+        this.gameBoard.initBoard();
+        this.checkForWinner();
+      }, 800);
     }
   }
 
