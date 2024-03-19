@@ -27,15 +27,16 @@ body {
 .header {
   background-color: #e7e5e4f3;
   padding: 1rem;
+  padding-bottom: 0.5rem;
   margin-block: 2rem;
   margin-block-start: 1rem;
   font-size: 3.2rem;
   font-weight: 800;
   animation: header 15s ease-in-out infinite;
   outline: 3px ridge;
-  text-shadow: 0 1px 1px hsla(117deg, 0%, 0%, 0.075),
+  /* text-shadow: 0 1px 1px hsla(117deg, 0%, 0%, 0.075),
     0 2px 2px hsl(117deg 0% 0% / 0.075), 0 4px 4px hsl(117deg 0% 0% / 0.075),
-    0 12px 12px hsl(117deg 0% 0% / 0.33);
+    0 12px 12px hsl(117deg 0% 0% / 0.33); */
   box-shadow: 0 1px 1px hsla(117deg, 0%, 0%, 0.075),
     0 2px 2px hsl(117deg 0% 0% / 0.075), 0 4px 4px hsl(117deg 0% 0% / 0.075),
     0 12px 12px hsl(117deg 0% 0% / 0.33);
