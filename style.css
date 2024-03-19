@@ -191,6 +191,7 @@ label:hover {
   background-image: linear-gradient(#f5f5f4, #a8a29e);
   animation: tie 2s infinite ease-in-out;
   border: 3px solid;
+  margin-block: 0.25rem;
 }
 
 .btns {
