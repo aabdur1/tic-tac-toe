@@ -8,7 +8,7 @@ body {
   font-family: "carbona-variable", sans-serif;
   font-variation-settings: "MONO" 30, "slnt" 0, "wght" 600;
   background-image: linear-gradient(#fecdd3, #c4b5fd);
-  background-color: #fecdd3;
+  background-color: #c4b5fd;
   margin: 0;
 }
 
@@ -26,7 +26,8 @@ body {
 
 .header {
   font-size: 3.6rem;
-  animation: header 60s ease-in-out infinite;
+  font-weight: 800;
+  animation: header 30s ease-in-out infinite;
   text-shadow: 0 1px 1px hsla(117deg, 0%, 0%, 0.075),
     0 2px 2px hsl(117deg 0% 0% / 0.075), 0 4px 4px hsl(117deg 0% 0% / 0.075),
     0 12px 12px hsl(117deg 0% 0% / 0.33);
@@ -94,9 +95,9 @@ label:hover {
   justify-items: center;
   align-items: center;
   font-size: 5rem;
-  box-shadow: 0 1px 1px hsla(117deg, 0%, 0%, 0.075),
+  /* box-shadow: 0 1px 1px hsla(117deg, 0%, 0%, 0.075),
     0 2px 2px hsl(117deg 0% 0% / 0.075), 0 4px 4px hsl(117deg 0% 0% / 0.075),
-    0 8px 8px hsl(117deg 0% 0% / 0.075), 0 16px 16px hsl(117deg 0% 0% / 0.075);
+    0 8px 8px hsl(117deg 0% 0% / 0.075), 0 16px 16px hsl(117deg 0% 0% / 0.075); */
   position: relative;
 }
 
