@@ -3,13 +3,13 @@ body {
   grid-template-rows: auto 1fr;
   width: 100dvw;
   height: 100dvh;
+  margin: 0;
   justify-items: center;
   align-items: center;
   font-family: "carbona-variable", sans-serif;
   font-variation-settings: "MONO" 30, "slnt" 0, "wght" 600;
   background-image: linear-gradient(40deg, #c7d2fe, #c4b5fd, #fecdd3, #fed7aa);
-  background-attachment: fixed;
-  background-size: 100% calc(100% + 10rem);
+  overflow-x: hidden;
 }
 
 @keyframes header {
@@ -281,4 +281,16 @@ button:hover {
   box-shadow: 0 1px 1px hsla(117deg, 0%, 0%, 0.075),
     0 2px 2px hsl(117deg 0% 0% / 0.075), 0 4px 4px hsl(117deg 0% 0% / 0.075),
     0 12px 12px hsl(117deg 0% 0% / 0.33);
+}
+
+.github {
+  justify-self: flex-end;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+img.github-logo {
+  width: 1rem;
 }
