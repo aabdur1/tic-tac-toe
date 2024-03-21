@@ -41,6 +41,7 @@ body {
 }
 
 .main {
+  height: 100%;
   align-self: start;
   display: flex;
   flex-direction: column;
@@ -73,6 +74,7 @@ label:hover {
   height: 3rem;
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
   font-size: 1.3rem;
 }
 
@@ -263,6 +265,7 @@ label:hover {
 button {
   color: #fecdd3;
   background-color: #000000;
+  border-radius: 5px;
   font-family: inherit;
   font-size: 1.2rem;
   border: none;
@@ -278,6 +281,9 @@ button {
 
 button:hover {
   transform: translateY(5%);
+  color: #3730a3;
+  background-color: #fafaf9;
+  animation: player1cells 2s infinite ease-in-out;
   box-shadow: 0 1px 1px hsla(117deg, 0%, 0%, 0.075),
     0 2px 2px hsl(117deg 0% 0% / 0.075), 0 4px 4px hsl(117deg 0% 0% / 0.075),
     0 12px 12px hsl(117deg 0% 0% / 0.33);
@@ -285,12 +291,27 @@ button:hover {
 
 .github {
   justify-self: flex-end;
-  margin-top: 1rem;
+  flex: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 0.5rem;
+  margin: 1rem;
+}
+
+.github:hover {
+  cursor: pointer;
+  text-decoration: underline white;
 }
 
 img.github-logo {
-  width: 1rem;
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+a.github-username {
+  text-decoration: none;
+  font-size: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  color: white;
 }
